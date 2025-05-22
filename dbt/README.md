@@ -6,6 +6,12 @@ docker compose --file ..\docker-compose-all.yaml exec dbt bash
 
 In local browser DBT Docs UI in localhost:8081
 
+or you can connect to separate dbt container via SSH:
+```
+ssh -i ../ssh_keys/dbt_client_id_rsa -p 2222 root@localhost
+```
+where dbt_client_id_rsa is a private key in ssh_keys projects directory
+
 
 ## Run DBT in separate container
 

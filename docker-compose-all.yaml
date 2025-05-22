@@ -32,6 +32,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/airflow/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/airflow/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/airflow/plugins:/opt/airflow/plugins
+    - ${AIRFLOW_PROJ_DIR:-.}/ssh_keys:/opt/ssh-keys
     - stage_data_volume:/stage_data/
   # user: "${AIRFLOW_UID:-50000}:0"
   user: "0:0"
@@ -100,6 +101,29 @@ services:
       - dbt docs generate | dbt docs serve --host "0.0.0.0" --port 8080 --no-browser
     volumes:
       - ./dbt/dbt_dwh:/usr/app/dbt
+    depends_on:
+      dwh_db:
+        condition: service_healthy
+
+  dbt-ssh:
+    image: ghcr.io/dbt-labs/dbt-postgres:1.9.0 
+    environment:
+      DBT_DB_HOST: dwh_db
+      DBT_DB_PORT: 5432
+      DBT_DB_NAME: dwh
+      DBT_DB_SCHEMA: stage
+      DBT_DB_USER: dwh
+      DBT_DB_PASS: dwh
+    ports:
+      - "2222:22"
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - /usr/app/scripts/dbt_ssh_init.sh
+    volumes:
+      - ./dbt/dbt_dwh:/usr/app/dbt
+      - ./dbt/scripts:/usr/app/scripts
+      - ./ssh_keys:/ssh_keys
     depends_on:
       dwh_db:
         condition: service_healthy
