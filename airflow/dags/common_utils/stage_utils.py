@@ -2,6 +2,7 @@
 
 import sys
 from pathlib import Path
+from typing import List
 
 from airflow.models.dag import DAG
 from airflow.operators.python import PythonOperator
@@ -26,6 +27,7 @@ def generate_s3_to_stage_dag(
         dag_id: str,
         s3_file_name:str,
         stage_table: str,
+        stage_table_columns: List[str] = None,
         description: str = None,
         stage_s3_bucket_name: str = STAGE_S3_BUCKET_PATH,
         dwh_stage_schema: str = DWH_STAGE_SCHEMA
@@ -35,7 +37,7 @@ def generate_s3_to_stage_dag(
     stage_s3_file_key = f'{stage_s3_bucket_name}{s3_file_name}'
     stage_full_table = f'{dwh_stage_schema}.{stage_table}'
     data_file_path = f'{LOCAL_STAGE_PATH}{s3_file_name}'
-    loading_sql_list = generate_copy_sql(stage_full_table, data_file_path)
+    loading_sql_list = generate_copy_sql(stage_full_table, data_file_path, table_columns=stage_table_columns)
 
     dag = DAG(
         dag_id=dag_id,

@@ -71,7 +71,7 @@ def download_from_abuse_api_db_api(save_file_path: str):
 
 with DAG(
         dag_id='load_stage_abuse_ip_db',
-        schedule='0 0 * * *',
+        schedule_interval=None,
         catchup=False,
         default_args=STAGE_DAG_DEFAULTS,
         description='Загрузка данных из API "Abuse IP DB"',
@@ -80,7 +80,7 @@ with DAG(
 
     stage_full_table = f'{DWH_STAGE_SCHEMA}.{STAGE_JSON_TABLE}'
     data_file_path = f'{LOCAL_STAGE_PATH}{LOCAL_FILE_NAME}'
-    loading_sql_list = generate_copy_sql(stage_full_table, data_file_path, None)
+    loading_sql_list = generate_copy_sql(stage_full_table, data_file_path, file_format=None)
 
 
     download_from_api_task = PythonOperator(

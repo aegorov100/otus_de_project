@@ -13,5 +13,6 @@ dag: DAG = generate_s3_to_stage_dag(
     dag_id='load_stage_cname_records',
     s3_file_name='cname_records.csv',
     stage_table='cname_records',
+    stage_table_columns=['num', 'domain_name', 'date_created', 'last_seen', 'type', 'address', 'ttl'],
     description='Загрузка файла данных "CNAME records"',
 )

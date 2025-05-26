@@ -5,5 +5,7 @@ date_created date,
 last_seen date,
 type varchar,
 address varchar,
-ttl integer
+ttl integer,
+source varchar default 'A_RECORDS'::varchar,
+load_ts timestamp default current_timestamp::timestamp
 );

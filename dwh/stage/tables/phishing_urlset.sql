@@ -12,5 +12,7 @@ jaccard_ar decimal(7, 6),
 jaccard_aa decimal(7, 6),
 jaccard_ar_rd decimal(7, 6),
 jaccard_ar_rem decimal(7, 6),
-label decimal(2, 1)
+label decimal(2, 1),
+source varchar default 'PHISHING_URLSET'::varchar,
+load_ts timestamp default current_timestamp::timestamp
 );

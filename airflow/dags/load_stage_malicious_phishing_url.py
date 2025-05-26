@@ -13,5 +13,6 @@ dag: DAG = generate_s3_to_stage_dag(
     dag_id='load_stage_malicious_phishing_url',
     s3_file_name='malicious_phishing.csv',
     stage_table='malicious_phishing_url',
+    stage_table_columns=['url','type'],
     description='Загрузка файла данных "Malicious Phishing URL"',
 )
