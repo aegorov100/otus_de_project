@@ -34,3 +34,13 @@ models:
     # Config indicated by + and applies to all files under models/example/
     example:
       +materialized: view
+    dv:
+      +materialized: incremental
+      +schema: dds
+      +tags: dv
+      hub:
+        +tags: hub
+      link:
+        +tags: link
+      sat:
+        +tags: sat

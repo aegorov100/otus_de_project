@@ -1,0 +1,84 @@
+version: 2
+
+sources:
+  - name: dwh_stage
+    description: DWH Staging layer
+    database: dwh
+    schema: stage
+
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+
+    tables:
+      - name: a_records
+        description: Domain A Records
+        columns:
+          - name: num
+            description: record number in dataset
+          - name: domain_name
+            description: domain name
+          - name: date_created
+            description: date of record creation
+          - name: last_seen
+            description: date of record was last seen
+          - name: type
+            description: constant "A"
+          - name: address
+            description: IP v4 address
+          - name: ttl
+            description: domain TTL value
+      - name: abuse_ip_db
+        description: Records from Abuse API DB API
+        columns:
+          - name: ip_address
+            description: IP v4 address
+          - name: country_code
+            description: IP country code, ISO 3166 alpha-2 codes
+          - name: last_reported_at
+            description: last reported at timestamp
+          - name: abuse_confidence_score
+            description: calculated evaluation on how abusive the IP is based on the users that reported it 
+      - name: cname_records
+        description: Domain CNAME Records
+        columns:
+          - name: num
+            description: record number in dataset
+          - name: domain_name
+            description: domain name
+          - name: date_created
+            description: date of record creation
+          - name: last_seen
+            description: date of record was last seen
+          - name: type
+            description: constant "CNAME"
+          - name: address
+            description: CNAME domain record
+          - name: ttl
+            description: domain TTL value
+      - name: malicious_phishing_url
+        description: Dataset consists of benign or safe, defacement, phishing, and malware URLs from https://www.kaggle.com/datasets/sid321axn/malicious-urls-dataset
+        columns:
+          - name: url
+            description: URL
+          - name: type
+            description: benign, defacement, malware, phishing
+      - name: phishing_n_legitimate_url
+        description: Dataset consists of phishing, and legitimate URLs from https://www.kaggle.com/datasets/harisudhan411/phishing-and-legitimate-urls
+        columns:
+          - name: url
+            description: URL
+          - name: status
+            description: 0 - phishing, 1 - legitimate
+      - name: phishing_urlset
+        description: Dataset consists of URLs and its feature for phishing classificaton from https://www.kaggle.com/datasets/joebeachcapital/phishing-urls
+        columns:
+          - name: domain
+            description: URL
+          - name: label
+            description: 0.0 - legitimate, 1.0  - phishing
+
+
+
+

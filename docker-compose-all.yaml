@@ -51,6 +51,7 @@ services:
       POSTGRES_USER: dwh
       POSTGRES_PASSWORD: dwh
       POSTGRES_DB: dwh
+    shm_size: 128mb
     ports:
       - "5432:5432"
     volumes:
