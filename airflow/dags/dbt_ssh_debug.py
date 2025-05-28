@@ -12,7 +12,7 @@ with DAG(
     schedule_interval=None,
     default_args=default_args,
     catchup=False,
-    tags=['dbt', 'ssh']
+    tags=['dbt', 'ssh', 'debug']
 ):
 
 

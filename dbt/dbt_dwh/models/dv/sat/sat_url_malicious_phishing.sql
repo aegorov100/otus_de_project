@@ -12,7 +12,9 @@
 with
 malicious_phishing_url as (
 select {{ clean_url('url') }} as url,
-       type
+       type,
+       source,
+       load_ts
   from {{ source('dwh_stage', 'malicious_phishing_url') }}  
 ),
 url_attrs as (
@@ -20,8 +22,8 @@ select distinct
        {{ hash(['url', 'type'], 'u') }} as sat_url_malicious_phishing_hashdiff,
        {{ hash(['url'], 'u') }} as url_hash_key,
        type,
-       'MALICIOUS_PHISHING_URL'::varchar as source,
-       current_timestamp::timestamp as load_ts
+       source,
+       load_ts
   from malicious_phishing_url u
  where url is not null
 )

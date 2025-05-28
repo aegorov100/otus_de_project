@@ -10,7 +10,7 @@ DWH_STAGE_SCHEMA = 'stage'
 LOCAL_STAGE_PATH = '/stage_data/'
 
 
-STAGE_DAG_DEFAULTS = {
+DAG_DEFAULTS = {
     'owner': 'airflow',
     'start_date': datetime(2025, 5, 9),
     'retries': 0,
@@ -18,3 +18,5 @@ STAGE_DAG_DEFAULTS = {
 }
 
 STAGE_TAGS = ['stage']
+
+DBT_SSH_CONN = 'dbt_ssh'

@@ -11,39 +11,45 @@
 
 with
 malicious_phishing_url as (
-select {{ clean_url('url') }} as url
+select {{ clean_url('url') }} as url,
+       source,
+       load_ts
   from {{ source('dwh_stage', 'malicious_phishing_url') }}  
 ),
 phishing_n_legitimate_url as (
-select {{ clean_url('url') }} as url
+select {{ clean_url('url') }} as url,
+       source,
+       load_ts
   from {{ source('dwh_stage', 'phishing_n_legitimate_url') }}  
 ),
 phishing_urlset as (
-select {{ clean_url('domain') }} as domain
+select {{ clean_url('domain') }} as domain,
+       source,
+       load_ts
   from {{ source('dwh_stage', 'phishing_urlset') }}  
 ),
 url as (
 select distinct
        {{ hash(['url'], 'mpu') }} as url_hash_key,
        url,
-       'MALICIOUS_PHISHING_URL'::varchar as source,
-       current_timestamp::timestamp as load_ts
+       source,
+       load_ts
   from malicious_phishing_url mpu
  where url is not null
 union all
 select distinct
        {{ hash(['url'], 'plu') }} as url_hash_key,
        url,
-       'PHISHING_N_LEGITIMATE_URL'::varchar as source,
-       current_timestamp::timestamp as load_ts
+       source,
+       load_ts
   from phishing_n_legitimate_url plu
  where url is not null
 union all
 select distinct
        {{ hash(['domain'], 'pus') }} as url_hash_key,
        domain as url,
-       'PHISHING_URLSET'::varchar as source,
-       current_timestamp::timestamp as load_ts
+       source,
+       load_ts
   from phishing_urlset pus
  where domain is not null
 ),

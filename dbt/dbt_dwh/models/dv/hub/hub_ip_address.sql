@@ -11,27 +11,31 @@
 
 with
 a_records as (
-select {{ clean_ip_address('address') }} as address
+select {{ clean_ip_address('address') }} as address,
+       source,
+       load_ts
   from {{ source('dwh_stage', 'a_records') }}
 ),
 abuse_ip_db as (
-select {{ clean_ip_address('ip_address') }} as ip_address
+select {{ clean_ip_address('ip_address') }} as ip_address,
+       source,
+       load_ts
   from {{ source('dwh_stage', 'abuse_ip_db') }}
 ),
 ip_address as (
 select distinct
        {{ hash(['address'], 'ar') }} as ip_address_hash_key,
        address as ip_address,
-       'A_RECORDS'::varchar as source,
-       current_timestamp::timestamp as load_ts
+       source,
+       load_ts
   from a_records ar
  where address is not null
 union all
 select distinct
        {{ hash(['ip_address'], 'aid') }} as ip_address_hash_key,
        ip_address as ip_address,
-       'ABUSE_IP_DB'::varchar as source,
-       current_timestamp::timestamp as load_ts
+       source,
+       load_ts
   from abuse_ip_db aid
  where ip_address is not null
 ),

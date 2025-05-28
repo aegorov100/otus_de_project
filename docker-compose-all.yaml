@@ -99,7 +99,7 @@ services:
     entrypoint: /bin/bash
     command:
       - -c
-      - dbt docs generate | dbt docs serve --host "0.0.0.0" --port 8080 --no-browser
+      - dbt deps && dbt docs generate && dbt docs serve --host "0.0.0.0" --port 8080 --no-browser
     volumes:
       - ./dbt/dbt_dwh:/usr/app/dbt
     depends_on:

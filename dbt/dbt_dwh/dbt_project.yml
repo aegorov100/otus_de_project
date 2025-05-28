@@ -31,16 +31,17 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   dbt_dwh:
-    # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
     dv:
       +materialized: incremental
       +schema: dds
-      +tags: dv
+      +tags: dds
       hub:
         +tags: hub
       link:
         +tags: link
       sat:
         +tags: sat
+    dm:
+      +materialized: table
+      +schema: dm
+      +tags: dm

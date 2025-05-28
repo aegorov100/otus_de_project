@@ -1,0 +1,211 @@
+
+version: 2
+
+models:
+
+  - name: hub_domain
+    description: "Domain Hub"
+    columns:
+      - name: domain_hash_key
+        description: "Hash from domain"
+        data_tests:
+          - unique
+          - not_null
+      - name: domain
+        description: "Domain (Primary key)"
+        data_tests:
+          - unique
+          - not_null
+
+  - name: hub_ip_address
+    description: "IP address Hub"
+    columns:
+      - name: ip_address_hash_key
+        description: "Hash from IP address"
+        data_tests:
+          - unique
+          - not_null
+      - name: ip_address
+        description: "IP address (Primary key)"
+        data_tests:
+          - unique
+          - not_null
+
+  - name: hub_url
+    description: "URL Hub"
+    columns:
+      - name: url_hash_key
+        description: "Hash from URL"
+        data_tests:
+          - unique
+          - not_null
+      - name: url
+        description: "URL (Primary key)"
+        data_tests:
+          - unique
+          - not_null
+
+  - name: link_domain_cname
+    description: "Domain and CNAME (Domain) Link"
+    columns:
+      - name: domain_cname_hash_key
+        description: "Hash from domain and CNAME (Primary key)"
+        data_tests:
+          - unique
+          - not_null
+      - name: domain_hash_key
+        description: "Hash from domain"
+        data_tests:
+          - not_null
+      - name: cname_hash_key
+        description: "Hash from CNAME (domain)"
+        data_tests:
+          - not_null
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - domain_hash_key
+            - cname_hash_key
+
+  - name: link_domain_ip_address
+    description: "Domain and IP Address Link"
+    columns:
+      - name: domain_ip_address_hash_key
+        description: "Hash from domain and IP address (Primary key)"
+        data_tests:
+          - unique
+          - not_null
+      - name: domain_hash_key
+        description: "Hash from domain"
+        data_tests:
+          - not_null
+      - name: ip_address_hash_key
+        description: "Hash from IP address"
+        data_tests:
+          - not_null
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - domain_hash_key
+            - ip_address_hash_key
+
+  - name: link_domain_url
+    description: "Domain and URL Link"
+    columns:
+      - name: domain_url_hash_key
+        description: "Hash from domain and URL (Primary key)"
+        data_tests:
+          - unique
+          - not_null
+      - name: domain_hash_key
+        description: "Hash from domain"
+        data_tests:
+          - not_null
+      - name: url_hash_key
+        description: "Hash from URL"
+        data_tests:
+          - not_null
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - domain_hash_key
+            - url_hash_key
+
+  - name: sat_ip_address_abuse_db
+    description: "IP address Satellite for Abuse IP DB API attributes"
+    columns:
+      - name: sat_ip_address_abuse_db_hashdiff
+        description: "Hash from conatination from all attributes (Primary key)"
+        data_tests:
+          - unique
+          - not_null
+      - name: ip_address_hash_key
+        description: "Hash from IP address"
+        data_tests:
+          - not_null
+      - name: country_code
+        description: IP country code, ISO 3166 alpha-2 codes
+        data_tests:
+          - not_null
+      - name: abuse_confidence_score
+        description: calculated evaluation on how abusive the IP is based on the users that reported it 
+        data_tests:
+          - not_null
+
+  - name: sat_url_malicious_phishing
+    description: "URL Satellite for Malicious and Phishing dataset attributes"
+    columns:
+      - name: sat_url_malicious_phishing_hashdiff
+        description: "Hash from conatination from all attributes (Primary key)"
+        data_tests:
+          - unique
+          - not_null
+      - name: url_hash_key
+        description: "Hash from URL"
+        data_tests:
+          - not_null
+      - name: type
+        description: benign, defacement, malware, phishing
+        data_tests:
+          - not_null
+
+  - name: sat_url_phishing_label
+    description: "URL Satellite for Malicious and Phishing Label dataset attributes"
+    columns:
+      - name: sat_url_phishing_label_hashdiff
+        description: "Hash from conatination from all attributes (Primary key)"
+        data_tests:
+          - unique
+          - not_null
+      - name: url_hash_key
+        description: "Hash from URL"
+        data_tests:
+          - not_null
+      - name: label
+        description: 0.0 - legitimate, 1.0  - phishing
+        data_tests:
+          - not_null
+
+  - name: sat_url_phishing_n_legitimate
+    description: "URL Satellite for Phishing and Legitimate status dataset attributes"
+    columns:
+      - name: sat_url_phishing_n_legitimate_hashdiff
+        description: "Hash from conatination from all attributes (Primary key)"
+        data_tests:
+          - unique
+          - not_null
+      - name: url_hash_key
+        description: "Hash from URL"
+        data_tests:
+          - not_null
+      - name: status
+        description: 0 - phishing, 1 - legitimate
+        data_tests:
+          - not_null
+
+  - name: domain_thread_stats
+    description: "Data mart for Domains Threads Statistics"
+    columns:
+      - name: domain
+        description: "Domain (Primary key)"
+        data_tests:
+          - unique
+          - not_null
+      - name: abuse_ip_count
+        description: "Count of IP addresses from Abuse IP DB correlated to the Domain"
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: abuse_ip_countries
+        description: "Country list of IP addresses from Abuse IP DB correlated to the Domain"
+        data_tests:
+          - not_null
+      - name: url_threats_count
+        description: "Count of dangerous URL correlated to the Domain"
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true

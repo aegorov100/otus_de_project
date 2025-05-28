@@ -12,7 +12,9 @@
 with
 phishing_n_legitimate_url as (
 select {{ clean_url('url') }} as url,
-       status
+       status,
+       source,
+       load_ts
   from {{ source('dwh_stage', 'phishing_n_legitimate_url') }}  
 ),
 url_attrs as (
@@ -20,8 +22,8 @@ select distinct
        {{ hash(['url', 'status'], 'u') }} as sat_url_phishing_n_legitimate_hashdiff,
        {{ hash(['url'], 'u') }} as url_hash_key,
        status,
-       'PHISHING_N_LEGITIMATE_URL'::varchar as source,
-       current_timestamp::timestamp as load_ts
+       source,
+       load_ts
   from phishing_n_legitimate_url u
  where url is not null
 )

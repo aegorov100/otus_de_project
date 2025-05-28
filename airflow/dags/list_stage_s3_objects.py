@@ -12,7 +12,7 @@ sys.path.append(str(Path(__file__).parent.absolute()))
 from common_utils.defaults import (
     STAGE_S3_CONN,
     STAGE_S3_BUCKET_NAME,
-    STAGE_DAG_DEFAULTS
+    DAG_DEFAULTS
 )
 
 
@@ -33,9 +33,10 @@ def list_files_in_bucket(bucket_name):
 
 with DAG(
     'list_stage_s3_objects',
-    default_args=STAGE_DAG_DEFAULTS,
+    default_args=DAG_DEFAULTS,
     description='Простое перечисление объектов в S3 бакете',
-    schedule_interval=None
+    schedule_interval=None,
+    tags=['debug']
 ) as dag:
 
     list_files_task = PythonOperator(

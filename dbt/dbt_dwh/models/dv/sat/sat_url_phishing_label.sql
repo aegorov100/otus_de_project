@@ -12,7 +12,9 @@
 with
 phishing_urlset as (
 select {{ clean_url('domain') }} as url,
-       label
+       label,
+       source,
+       load_ts
   from {{ source('dwh_stage', 'phishing_urlset') }}  
 ),
 url_attrs as (
@@ -20,8 +22,8 @@ select distinct
        {{ hash(['url', 'label'], 'u') }} as sat_url_phishing_label_hashdiff,
        {{ hash(['url'], 'u') }} as url_hash_key,
        label,
-       'PHISHING_URLSET'::varchar as source,
-       current_timestamp::timestamp as load_ts
+       source,
+       load_ts
   from phishing_urlset u
  where url is not null
 )

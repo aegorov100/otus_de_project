@@ -3,7 +3,7 @@
 {%- endmacro %}
 
 {% macro clean_domain(column) -%}
-    lower({{ column }})
+    regexp_replace(lower({{ column }}), '^www\.', '')
 {%- endmacro %}
 
 {% macro clean_ip_address(column) -%}
@@ -11,6 +11,6 @@
 {%- endmacro %}
 
 {% macro domain_from_url(column) -%}
-    (string_to_array(regexp_replace((string_to_array({{ column }}, '/'))[1], '^www\.', ''), ':'))[1] 
+    (string_to_array(regexp_replace((string_to_array(regexp_replace(lower({{ column }}), '^[a-z]{1,}://', ''), '/'))[1], '^www\.', ''), ':'))[1] 
 {%- endmacro %}
 

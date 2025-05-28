@@ -10,7 +10,7 @@ from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 sys.path.append(str(Path(__file__).parent.absolute()))
 
 from common_utils.defaults import (
-    STAGE_DAG_DEFAULTS,
+    DAG_DEFAULTS,
     STAGE_TAGS,
 )
 
@@ -23,9 +23,9 @@ extra_defaults = {
 
 with DAG(
         dag_id='load_stage_all',
-        default_args=STAGE_DAG_DEFAULTS | extra_defaults,
+        default_args=DAG_DEFAULTS | extra_defaults,
         schedule_interval=None,
-        tags=STAGE_TAGS + ['toplevel']
+        tags=STAGE_TAGS
 ) as dag:
 
     start_task = EmptyOperator(task_id='start')

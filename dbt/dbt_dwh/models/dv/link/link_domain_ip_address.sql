@@ -12,7 +12,9 @@
 with
 a_records as (
 select {{ clean_domain('domain_name') }} as domain_name,
-       {{ clean_ip_address('address') }} as address
+       {{ clean_ip_address('address') }} as address,
+       source,
+       load_ts
   from {{ source('dwh_stage', 'a_records') }}
 ),
 domain_x_ip as (
@@ -20,8 +22,8 @@ select distinct
        {{ hash(['domain_name', 'address'], 'ar') }} as domain_ip_address_hash_key,
        {{ hash(['domain_name'], 'ar') }} as domain_hash_key,
        {{ hash(['address'], 'ar') }} as ip_address_hash_key,
-       'A_RECORDS'::varchar as source,
-       current_timestamp::timestamp as load_ts
+       source,
+       load_ts
   from a_records ar
  where domain_name is not null
    and address is not null)

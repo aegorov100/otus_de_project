@@ -13,17 +13,20 @@ with
 domain_x_url as (
 select {{ clean_domain(domain_from_url('url')) }} as domain_name,
        {{ clean_url('url') }} as url,
-       'MALICIOUS_PHISHING_URL'::varchar as source
+       source,
+       load_ts
   from {{ source('dwh_stage', 'malicious_phishing_url') }}
 union all
 select {{ clean_domain(domain_from_url('url')) }} as domain_name,
        {{ clean_url('url') }} as url,
-       'PHISHING_N_LEGITIMATE_URL'::varchar as source
+       source,
+       load_ts
   from {{ source('dwh_stage', 'phishing_n_legitimate_url') }}
 union all
 select {{ clean_domain(domain_from_url('domain')) }} as domain_name,
        {{ clean_url('domain') }} as url,
-       'PHISHING_URLSET'::varchar as source
+       source,
+       load_ts
   from {{ source('dwh_stage', 'phishing_urlset') }}
 ),
 domain_x_url_hash as (
@@ -32,7 +35,7 @@ select distinct
        {{ hash(['domain_name'], 'du') }} as domain_hash_key,
        {{ hash(['url'], 'du') }} as url_hash_key,
        source,
-       current_timestamp::timestamp as load_ts
+       load_ts
   from domain_x_url du
  where domain_name is not null
    and url is not null),

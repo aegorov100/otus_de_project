@@ -19,7 +19,7 @@ from defaults import (
     DWH_CONN,
     DWH_STAGE_SCHEMA,
     LOCAL_STAGE_PATH,
-    STAGE_DAG_DEFAULTS,
+    DAG_DEFAULTS,
     STAGE_TAGS,
 )
 
@@ -41,7 +41,7 @@ def generate_s3_to_stage_dag(
 
     dag = DAG(
         dag_id=dag_id,
-        default_args=STAGE_DAG_DEFAULTS,
+        default_args=DAG_DEFAULTS,
         description=description,
         schedule_interval=None,
         tags=STAGE_TAGS

@@ -19,7 +19,7 @@ from common_utils.defaults import (
     DWH_CONN,
     DWH_STAGE_SCHEMA,
     LOCAL_STAGE_PATH,
-    STAGE_DAG_DEFAULTS,
+    DAG_DEFAULTS,
     STAGE_TAGS,
 )
 
@@ -73,7 +73,7 @@ with DAG(
         dag_id='load_stage_abuse_ip_db',
         schedule_interval=None,
         catchup=False,
-        default_args=STAGE_DAG_DEFAULTS,
+        default_args=DAG_DEFAULTS,
         description='Загрузка данных из API "Abuse IP DB"',
         tags=STAGE_TAGS
     ) as dag:
