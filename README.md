@@ -26,11 +26,15 @@ docker compose --file .\docker-compose-all.yaml up -d
 
 ## Architecture
 
+![Architecture](docs/Otus_DE_project_architecture.png)
+
 
 ## DWH ERD
 
+![DWH ERD](docs/Otus_Project_ERD.png)
 
-## TODO
+
+## Possible Improvements
 
 - Build Docker image for DBT with SSH
 - Add MinIO instead of Managed S3 
